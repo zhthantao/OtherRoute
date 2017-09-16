@@ -42,7 +42,7 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
     private static final int PATTERN_GAP_LENGTH_PX = 50;
     private static final int PATTERN_DASH_LENGTH_PX = 20;
     private static Polyline[] polylines = new Polyline[3];
-
+    private static DirectionsResult results;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +88,7 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         DateTime now = new DateTime();
         try {
             DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(true).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
+            results = resultPT;
             //addPolylines(resultPT, mMap);
             addCustomizedPolyline(resultPT, mMap,"Bike", Color.rgb(253,174,97));
             addCustomizedPolyline(resultPT, mMap,"Walk", Color.rgb(215,25,28));
@@ -114,6 +115,7 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         } catch (Exception e) {
             Log.d("Error", e.toString());
         }
+
         googleMap.setOnPolylineClickListener(this);
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
@@ -253,8 +255,9 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this, "Info window clicked",
-                Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Info window clicked",Toast.LENGTH_SHORT).show();
+        marker.setVisible(false);
+        animatedWalk();
     }
     private LatLng computeCentroid(List<LatLng> points, double percentage) {
         int n = points.size();
@@ -269,4 +272,16 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
 
         mMap.addMarker(markerOptions);
     }
-}
+
+    private void animatedWalk()
+    {
+        Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0]
+                .startLocation.lat,results.routes[0].legs[0].startLocation.lng))
+                .title(results.routes[0].legs[0].startAddress));
+
+        LatLngInterpolator mLatLngInterpolator = new LatLngInterpolator.Spherical() ;
+
+        MarkerAnimation.animateMarkerToGB(marker,new LatLng(results.routes[0].legs[0]
+                .endLocation.lat,results.routes[0].legs[0].endLocation.lng),mLatLngInterpolator);
+    }
+    }
