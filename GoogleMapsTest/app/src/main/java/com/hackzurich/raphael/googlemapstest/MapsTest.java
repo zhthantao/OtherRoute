@@ -137,11 +137,20 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         DateTime now = new DateTime(2017,9,18,15,30);
         try {
             DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
-            //addPolylines(resultPT, mMap);
-            int radius = 300;
-            getNearbyStations(resultPT.routes[0].legs[0].startLocation.lat,resultPT.routes[0].legs[0].startLocation.lng,radius, "origin");
-            getNearbyStations(resultPT.routes[0].legs[resultPT.routes[0].legs.length-1].endLocation.lat,resultPT.routes[0].legs[resultPT.routes[0].legs.length-1].endLocation.lng,radius, "destination");
 
+            //addPolylines(resultPT, mMap);
+//            int radius = 300;
+//            getNearbyStations(resultPT.routes[0].legs[0].startLocation.lat,resultPT.routes[0].legs[0].startLocation.lng,radius, "origin");
+//            getNearbyStations(resultPT.routes[0].legs[resultPT.routes[0].legs.length-1].endLocation.lat,resultPT.routes[0].legs[resultPT.routes[0].legs.length-1].endLocation.lng,radius, "destination");
+            results = resultPT;
+            //addPolylines(resultPT, mMap);
+            //addCustomizedPolyline(resultPT, mMap,"Bike", Color.rgb(253,174,97));
+            //addCustomizedPolyline(resultPT, mMap,"Walk", Color.rgb(215,25,28));
+            //addCustomizedPolyline(resultPT, mMap,"Bus", Color.rgb(44,200,182));
+
+            //addMarkersToMapNew(resultPT,mMap, 0, "200", 0.5);
+            //addMarkersToMapNew(resultPT,mMap, 1, "1000", 0.5);
+            //addMarkersToMapNew(resultPT,mMap, 2, "0", 0.1);
             List<LatLng> decodedPath = PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath());
 
             LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
