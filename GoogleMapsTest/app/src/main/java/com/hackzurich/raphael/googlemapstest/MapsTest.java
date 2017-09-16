@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.*;
 
 import com.google.maps.android.*;
 import android.widget.Toast;
-
+import android.content.res.Resources;
 
 import android.util.Log;
 import android.graphics.*;
@@ -33,8 +33,8 @@ import java.util.*;
 
 
 
-public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
-        GoogleMap.OnPolylineClickListener{
+public class MapsTest extends FragmentActivity implements OnMapReadyCallback,GoogleMap.OnInfoWindowClickListener,
+        GoogleMap.OnPolylineClickListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private LatLngBounds latLngBounds;
@@ -51,6 +51,8 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
     }
 
 
@@ -69,14 +71,27 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
         String origin = "Zurich Technopark";
         String destination = "Zurich Mainstation";
 
+        //mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.mapstyle_night));
+
+            if (!success) {
+            }
+        } catch (Resources.NotFoundException e) {
+        }
 
         DateTime now = new DateTime();
         try {
             DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(true).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
             //addPolylines(resultPT, mMap);
-            addCustomizedPolyline(resultPT, mMap,"Bike", Color.BLACK);
-            addCustomizedPolyline(resultPT, mMap,"Walk", Color.RED);
-            addCustomizedPolyline(resultPT, mMap,"Bus", Color.BLUE);
+            addCustomizedPolyline(resultPT, mMap,"Bike", Color.rgb(253,174,97));
+            addCustomizedPolyline(resultPT, mMap,"Walk", Color.rgb(215,25,28));
+            addCustomizedPolyline(resultPT, mMap,"Bus", Color.rgb(44,200,182));
 
             addMarkersToMapNew(resultPT,mMap, 0, "200", 0.5);
             addMarkersToMapNew(resultPT,mMap, 1, "1000", 0.5);
@@ -100,6 +115,9 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
             Log.d("Error", e.toString());
         }
         googleMap.setOnPolylineClickListener(this);
+        googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnInfoWindowClickListener(this);
+
     }
 
     private GeoApiContext getGeoContext() {
@@ -133,7 +151,7 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
 //        marker.setInfoWindowAnchor(.5f,1.0f);
 
         IconGenerator iconFactory = new IconGenerator(this);
-        iconFactory.setStyle(IconGenerator.STYLE_PURPLE);
+        iconFactory.setStyle(IconGenerator.STYLE_GREEN);
         addIcon(iconFactory, reward, middlePoint);
     }
 
@@ -195,15 +213,6 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void onPolylineClick(Polyline polyline) {
-        // Flip from solid stroke to dotted stroke pattern.
-//        if ((polyline.getPattern() == null) || (!polyline.getPattern().contains(DOT))) {
-//            polyline.setPattern(PATTERN_POLYLINE_DOTTED);
-//        } else {
-//            // The default pattern is a solid stroke.
-//            polyline.setPattern(null);
-//        }
-
-
         int reward = 0;
         int time = 0;
 
@@ -226,8 +235,8 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
                 polylineX.setWidth(15);
             }
             polyline.setWidth(50);
-            Toast.makeText(this,"Choose to " + polyline.getTag().toString() + ", it will take " + time + "mins, and get reward of " +  Integer.toString(reward),
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Choose to " + polyline.getTag().toString() + ", it will take " + time + " mins, and get reward of " +  Integer.toString(reward),
+                    Toast.LENGTH_LONG).show();
         } else {
             // The default pattern is a solid stroke.
             polyline.setWidth(15);
@@ -236,7 +245,17 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
 
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        marker.setTitle("Go!");
+        return false;
+    }
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(this, "Info window clicked",
+                Toast.LENGTH_SHORT).show();
+    }
     private LatLng computeCentroid(List<LatLng> points, double percentage) {
         int n = points.size();
         return new LatLng(points.get((int)(percentage*n)).latitude,points.get((int)(percentage*n)).longitude);

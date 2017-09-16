@@ -1,7 +1,0 @@
-#Sat Sep 16 15:21:28 CEST 2017
-base.0=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_c50998d1e087c3e3745d837752882a187d6d0ab3
-renamed.1=classes.dex
-renamed.0=classes2.dex
-file.1=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_827bb74fd604a855d5dbc0265bc64b92621a5ff5\\classes.dex
-base.1=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_827bb74fd604a855d5dbc0265bc64b92621a5ff5
-file.0=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_c50998d1e087c3e3745d837752882a187d6d0ab3\\classes.dex
