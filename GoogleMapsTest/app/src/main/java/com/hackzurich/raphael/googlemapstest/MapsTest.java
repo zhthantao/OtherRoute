@@ -16,10 +16,9 @@ import com.google.maps.model.DirectionsResult;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.*;
 import com.google.android.gms.maps.model.Polyline;
-
 import android.util.Log;
 import android.graphics.*;
-
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.concurrent.TimeUnit;
 import org.joda.time.DateTime;
@@ -30,6 +29,7 @@ import java.util.*;
 public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private LatLngBounds latLngBounds;
 
 
     @Override
@@ -55,23 +55,29 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng zurich = new LatLng(47.37, 8.5);
-        mMap.addMarker(new MarkerOptions().position(zurich).title("Marker in Zurich"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(zurich,15));
-        DateTime now = new DateTime();
         String origin = "Zurich Technopark";
         String destination = "Zurich Mainstation";
 
+        DateTime now = new DateTime();
         try {
-            DirectionsResult result = DirectionsApi.newRequest(getGeoContext()).mode(TravelMode.DRIVING).origin(origin).destination(destination).departureTime(now).await();
-            addCustomizedPolyline(result, mMap);
-            addMarkersToMap(result, mMap);
-            DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
-           // addPolyline(resultPT, mMap);
+            DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(true).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
+            addPolylines(resultPT, mMap);
+
+            List<LatLng> decodedPath = PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath());
+            LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+            for (LatLng latLngPoint : decodedPath)
+                boundsBuilder.include(latLngPoint);
+
+            latLngBounds = boundsBuilder.build();
+            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    int routePadding = 100;
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds,routePadding));
+                }
+            });
         } catch (Exception e) {
-            Log.d("Error",e.toString());
+            Log.d("Error", e.toString());
         }
 
     }
@@ -90,11 +96,6 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
         return  "Time :"+ results.routes[0].legs[0].duration.humanReadable + " Distance :" + results.routes[0].legs[0].distance.humanReadable;
     }
 
-    private void addPolyline(DirectionsResult results, GoogleMap mMap) {
-        List<LatLng> decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.getEncodedPath());
-        mMap.addPolyline(new PolylineOptions().addAll(decodedPath));
-    }
-
     private void addCustomizedPolyline(DirectionsResult result, GoogleMap mMap) {
         List<LatLng> decodedPath = PolyUtil.decode(result.routes[0].overviewPolyline.getEncodedPath());
         Polyline line = mMap.addPolyline(new PolylineOptions()
@@ -102,5 +103,11 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
                 .addAll(decodedPath)
                 .width(15)
                 .color(Color.RED));
+    private void addPolylines(DirectionsResult results, GoogleMap mMap) {
+        for (int i = 0; i< results.routes.length; i++) {
+            List<LatLng> decodedPath = PolyUtil.decode(results.routes[i].overviewPolyline.getEncodedPath());
+            mMap.addPolyline(new PolylineOptions().addAll(decodedPath));
+        }
     }
+
 }
