@@ -25,6 +25,10 @@ import android.util.Log;
 import android.graphics.*;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import com.google.android.gms.maps.model.MapStyleOptions;
+import android.content.res.Resources;
+
+
 import java.util.concurrent.TimeUnit;
 import org.joda.time.DateTime;
 import java.util.*;
@@ -34,11 +38,14 @@ import android.os.Handler;
 import android.view.View;
 
 
+
 public class MapsTest extends FragmentActivity implements OnMapReadyCallback,GoogleMap.OnInfoWindowClickListener,
-        GoogleMap.OnPolylineClickListener, GoogleMap.OnMarkerClickListener {
+        GoogleMap.OnPolylineClickListener, GoogleMap.OnMarkerClickListener, AsyncResponse {
+
 
     private GoogleMap mMap;
     private LatLngBounds latLngBounds;
+
 
     private static final int PATTERN_GAP_LENGTH_PX = 50;
     private static final int PATTERN_DASH_LENGTH_PX = 20;
@@ -46,8 +53,10 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
     private static DirectionsResult results;
     TextView text1;
     long startTime = 0;
-
+    Map<String, String> originStations = new HashMap<String, String>();
+    Map<String, String> destinationStations =  new HashMap<String, String>();
     Handler timerHandler = new Handler();
+          
     Runnable timerRunnable = new Runnable() {
 
         @Override
@@ -64,6 +73,7 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             }
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +99,6 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        String origin = "Zurich Technopark";
-        String destination = "Zurich Mainstation";
 
         //mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 
@@ -105,7 +113,7 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             }
         } catch (Resources.NotFoundException e) {
         }
-
+/*
         DateTime now = new DateTime();
         try {
             DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(true).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
@@ -117,7 +125,20 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
 
             addMarkersToMapNew(resultPT,mMap, 0, "200", 0.5);
             addMarkersToMapNew(resultPT,mMap, 1, "1000", 0.5);
-            addMarkersToMapNew(resultPT,mMap, 2, "0", 0.1);
+            addMarkersToMapNew(resultPT,mMap, 2, "0", 0.1);*/
+        String origin = "Giessereistrasse 18, 8005 Zürich";
+        String destination = "Tannenstrasse 17, 8006 Zurich";
+
+        //originStations.add(origin);
+        //destinationStations.add(destination);
+
+        DateTime now = new DateTime(2017,9,18,15,30);
+        try {
+            DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
+            //addPolylines(resultPT, mMap);
+            int radius = 300;
+            getNearbyStations(resultPT.routes[0].legs[0].startLocation.lat,resultPT.routes[0].legs[0].startLocation.lng,radius, "origin");
+            getNearbyStations(resultPT.routes[0].legs[resultPT.routes[0].legs.length-1].endLocation.lat,resultPT.routes[0].legs[resultPT.routes[0].legs.length-1].endLocation.lng,radius, "destination");
 
             List<LatLng> decodedPath = PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath());
 
@@ -141,6 +162,85 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnInfoWindowClickListener(this);
 
+    }
+
+    public void processFinish(String output){
+        String[] resultSplit = output.split("///",2);
+        List<HashMap<String, String>> nearbyPlacesList = null;
+        DataParser dataParser = new DataParser();
+        nearbyPlacesList =  dataParser.parse(resultSplit[1]);
+
+        // Combine stations with same name and add them to a list of strings. 1 List for origin and one for destination
+        for (int i = 0; i < nearbyPlacesList.size(); i++) {
+            HashMap<String, String> googlePlace = nearbyPlacesList.get(i);
+            String stationName = googlePlace.get("place_name");
+            if (resultSplit[0].equals("origin")) {
+                if (!originStations.containsKey(stationName)) {
+                    originStations.put(stationName, googlePlace.get("lat") +","+googlePlace.get("lng"));
+                    //Log.d("Station", resultSplit[0]+" "+stationName);
+                }
+            } else {
+                if (!destinationStations.containsKey(stationName)) {
+                    destinationStations.put(stationName, googlePlace.get("lat") +","+googlePlace.get("lng"));
+                    //Log.d("Station", resultSplit[0]+" "+stationName);
+                }
+            }
+
+        }
+        String[] originNames = originStations.keySet().toArray(new String[originStations.keySet().size()]);
+        String[] destinationNames = destinationStations.keySet().toArray(new String[destinationStations.keySet().size()]);
+        // Get routes between all stations of both list
+        if ((destinationStations.size() > 1) && (originStations.size() > 1)) {
+            ArrayList<DirectionsResult> results = new ArrayList<DirectionsResult>();
+            DateTime now = new DateTime(2017,9,18,15,30);
+            for (int i = 0; i < originStations.size(); i++) {
+                for (int j = 0; j < destinationStations.size(); j++) {
+                    try {
+                        results.add(DirectionsApi.newRequest(getGeoContext()).alternatives(true).mode(TravelMode.TRANSIT).origin(originStations.get(originNames[i])).destination(destinationStations.get(destinationNames[j])).departureTime(now).await());
+                        //addPolylines(resultPT, mMap);
+                    } catch (Exception e) {
+                        Log.e("Critical", e.getMessage());
+                    }
+                }
+            }
+            final ArrayList<Float> distances = new ArrayList<Float>();
+            ArrayList<Integer> indices_i = new ArrayList<Integer>();
+            ArrayList<Integer> indices_k = new ArrayList<Integer>();
+            for (int i = 0; i < results.size(); i++) {
+                // Rank and select routes
+                for (int k = 0; k < results.get(i).routes.length; k++) {
+                    float dist = Float.parseFloat(results.get(i).routes[k].legs[0].distance.humanReadable.split(" ")[0]);
+                    indices_i.add(i);
+                    indices_k.add(k);
+                    distances.add(dist);
+                }
+
+            }
+            //Collections.sort(distances);
+            List<Integer> indices = new ArrayList<Integer>(distances.size());
+            for (int l = 0; l < distances.size(); l++) {
+                indices.add(l);
+            }
+            Comparator<Integer> comparator = new Comparator<Integer>() {
+                public int compare(Integer i, Integer j) {
+                    return Float.compare(distances.get(i), distances.get(j));
+                }
+            };
+            Collections.sort(indices, comparator);
+            float[] sortedDistances = new float[distances.size()];
+            for (int l = 0; l < distances.size(); l++) {
+                sortedDistances[l] = distances.get(indices.get(l));
+            }
+            ArrayList<List<LatLng>> filteredResults = new ArrayList<List<LatLng>>();
+            filteredResults.add(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[indices_k.get(indices.get(0))].overviewPolyline.getEncodedPath()));
+            mMap.addPolyline(new PolylineOptions().addAll(filteredResults.get(0)).color(Color.RED));
+            filteredResults.add(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].overviewPolyline.getEncodedPath()));
+            mMap.addPolyline(new PolylineOptions().addAll(filteredResults.get(1)).color(Color.BLUE));
+            filteredResults.add(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].overviewPolyline.getEncodedPath()));
+            mMap.addPolyline(new PolylineOptions().addAll(filteredResults.get(2)).color(Color.GREEN));
+            //mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(7).routes[0].legs[0].steps[0].polyline.getEncodedPath())).color(Color.GREEN));
+
+        }
     }
 
     private GeoApiContext getGeoContext() {
@@ -220,7 +320,8 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
     private void addPolylines(DirectionsResult results, GoogleMap mMap) {
         for (int i = 0; i< results.routes.length; i++) {
             List<LatLng> decodedPath = PolyUtil.decode(results.routes[i].overviewPolyline.getEncodedPath());
-            mMap.addPolyline(new PolylineOptions().addAll(decodedPath));
+            mMap.addPolyline(new PolylineOptions().addAll(decodedPath).color(Color.argb(125, 5*counter, 5*counter, 5*counter)));
+            counter++;
         }
     }
     private static final PatternItem DOT = new Dot();
@@ -310,3 +411,32 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         text1.setVisibility(View.VISIBLE);
     }
     }
+
+    private int counter = 0;
+
+    private void getNearbyStations(double latitude, double longitude, int radius, String stationName) {
+        String url = getUrl(latitude, longitude, "transit_station", radius);
+        Object[] DataTransfer = new Object[3];
+        DataTransfer[0] = mMap;
+        DataTransfer[1] = url;
+        DataTransfer[2] = stationName;
+        //Log.d("onClick", url);
+        GetNearByPlacesData getNearbyPlacesData = new GetNearByPlacesData();
+        getNearbyPlacesData.delegate = this;
+        getNearbyPlacesData.execute(DataTransfer);
+
+    }
+
+    private String getUrl(double latitude, double longitude, String nearbyPlace, int radius) {
+
+        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlacesUrl.append("location=" + latitude + "," + longitude);
+        googlePlacesUrl.append("&radius=" + radius);
+        googlePlacesUrl.append("&type=" + nearbyPlace);
+        googlePlacesUrl.append("&sensor=true");
+        googlePlacesUrl.append("&key=" + getString(R.string.google_maps_key));
+        Log.d("getUrl", googlePlacesUrl.toString());
+        return (googlePlacesUrl.toString());
+    }
+
+}
