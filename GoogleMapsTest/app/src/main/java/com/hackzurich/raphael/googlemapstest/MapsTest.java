@@ -14,19 +14,23 @@ import com.google.maps.model.TravelMode;
 import com.google.maps.DirectionsApi;
 import com.google.maps.model.DirectionsResult;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.android.PolyUtil;
+import com.google.maps.android.*;
+import com.google.android.gms.maps.model.Polyline;
 
 import android.util.Log;
+import android.graphics.*;
 
 
 import java.util.concurrent.TimeUnit;
-import java.util.List;
 import org.joda.time.DateTime;
+import java.util.*;
+
 
 
 public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +63,13 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
         DateTime now = new DateTime();
         String origin = "Zurich Technopark";
         String destination = "Zurich Mainstation";
+
         try {
             DirectionsResult result = DirectionsApi.newRequest(getGeoContext()).mode(TravelMode.DRIVING).origin(origin).destination(destination).departureTime(now).await();
-            addPolyline(result, mMap);
+            addCustomizedPolyline(result, mMap);
+            addMarkersToMap(result, mMap);
             DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
-            addPolyline(resultPT, mMap);
+           // addPolyline(resultPT, mMap);
         } catch (Exception e) {
             Log.d("Error",e.toString());
         }
@@ -89,25 +95,12 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
         mMap.addPolyline(new PolylineOptions().addAll(decodedPath));
     }
 
-    public GeoPoint getLocationFromAddress(String strAddress){
-
-        Geocoder coder = new Geocoder(this);
-        List<Address> address;
-        GeoPoint p1 = null;
-
-        try {
-            address = coder.getFromLocationName(strAddress,5);
-            if (address==null) {
-                return null;
-            }
-            Address location=address.get(0);
-            location.getLatitude();
-            location.getLongitude();
-
-            p1 = new GeoPoint((double) (location.getLatitude() * 1E6),
-                    (double) (location.getLongitude() * 1E6));
-
-            return p1;
-        }
+    private void addCustomizedPolyline(DirectionsResult result, GoogleMap mMap) {
+        List<LatLng> decodedPath = PolyUtil.decode(result.routes[0].overviewPolyline.getEncodedPath());
+        Polyline line = mMap.addPolyline(new PolylineOptions()
+                .clickable(true)
+                .addAll(decodedPath)
+                .width(15)
+                .color(Color.RED));
     }
 }
