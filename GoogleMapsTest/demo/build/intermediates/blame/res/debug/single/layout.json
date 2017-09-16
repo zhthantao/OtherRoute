@@ -1,0 +1,46 @@
+[
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\layout\\amu_webview.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\library\\build\\intermediates\\bundles\\default\\res\\layout\\amu_webview.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\layout\\geojson_demo.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\layout\\geojson_demo.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\layout\\amu_text_bubble.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\library\\build\\intermediates\\bundles\\default\\res\\layout\\amu_text_bubble.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\layout\\heatmaps_demo.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\layout\\heatmaps_demo.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\layout\\multi_profile.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\layout\\multi_profile.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\layout\\amu_info_window.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\library\\build\\intermediates\\bundles\\default\\res\\layout\\amu_info_window.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\layout\\places_demo.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\layout\\places_demo.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\layout\\main.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\layout\\main.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\layout\\map.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\layout\\map.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\layout\\kml_demo.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\layout\\kml_demo.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\layout\\distance_demo.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\layout\\distance_demo.xml"
+    }
+]

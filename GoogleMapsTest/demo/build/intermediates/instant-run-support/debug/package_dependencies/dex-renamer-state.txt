@@ -1,0 +1,22 @@
+#Sat Sep 16 15:21:28 CEST 2017
+renamed.6=classes6.dex
+renamed.5=classes7.dex
+renamed.4=classes2.dex
+renamed.3=classes5.dex
+renamed.2=classes.dex
+renamed.1=classes4.dex
+renamed.0=classes3.dex
+base.6=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\internal_impl-24.0.0_dc80c4fef39295b7673723ba7ec5cffaf89d1250
+base.5=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\support-annotations-24.0.0_1fb0d1f80c03dff5995cb3667c2ea636dc305356
+base.4=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_922703cee8494e971c31fc9b964a407f3fa9ed59
+base.3=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_e07b114bc020cf4bd5108fa69ed3cab283f8d6a5
+base.2=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_36df84420c73a671ac56b199d79496f3c66f7555
+base.1=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_b57dc0a3d8e5dc09601415381073e88d9085af0e
+base.0=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_b4ac2397155aa242e4afc9381a6694c206adfbb0
+file.6=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\internal_impl-24.0.0_dc80c4fef39295b7673723ba7ec5cffaf89d1250\\classes.dex
+file.5=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\support-annotations-24.0.0_1fb0d1f80c03dff5995cb3667c2ea636dc305356\\classes.dex
+file.4=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_922703cee8494e971c31fc9b964a407f3fa9ed59\\classes.dex
+file.3=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_e07b114bc020cf4bd5108fa69ed3cab283f8d6a5\\classes.dex
+file.2=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_36df84420c73a671ac56b199d79496f3c66f7555\\classes.dex
+file.1=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_b57dc0a3d8e5dc09601415381073e88d9085af0e\\classes.dex
+file.0=D\:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_b4ac2397155aa242e4afc9381a6694c206adfbb0\\classes.dex
