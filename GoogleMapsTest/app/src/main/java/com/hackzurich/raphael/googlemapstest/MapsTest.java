@@ -1,6 +1,5 @@
 package com.hackzurich.raphael.googlemapstest;
 
-import android.location.Address;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -19,15 +18,12 @@ import com.google.maps.android.PolyUtil;
 import android.util.Log;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import android.location.Geocoder;
-
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 import org.joda.time.DateTime;
 
 
-public class MapsTest extends FragmentActivity implements OnMapReadyCallback,GoogleMap.OnMapLoadedCallback {
+public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private LatLngBounds latLngBounds;
@@ -57,24 +53,11 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         mMap = googleMap;
         String origin = "Zurich Technopark";
         String destination = "Zurich Mainstation";
-        // Add a marker and move the camera
-        Geocoder geocoder = new Geocoder(this);
-        try {
-            Address originAddress = geocoder.getFromLocationName(origin,1).get(0);
-            Address destinationAddress = geocoder.getFromLocationName(destination,1).get(0);
-            LatLng pos = new LatLng((originAddress.getLatitude()+destinationAddress.getLatitude())/2,(originAddress.getLongitude()+destinationAddress.getLongitude())/2);
-            //mMap.addMarker(new MarkerOptions().position(pos).title("Marker in Zurich"));
-            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15));
-        } catch (IOException ex) {
-            Log.d("Error", ex.toString());
-        }
 
         DateTime now = new DateTime();
         try {
-            DirectionsResult result = DirectionsApi.newRequest(getGeoContext()).mode(TravelMode.DRIVING).origin(origin).destination(destination).departureTime(now).await();
-            addPolyline(result, mMap);
             DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(true).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
-            addPolyline(resultPT, mMap);
+            addPolylines(resultPT, mMap);
 
             List<LatLng> decodedPath = PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath());
             LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
@@ -96,28 +79,16 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
 
     }
 
-    @Override
-    public void onMapLoaded() {
-        //Your code where exception occurs goes here...
-    }
-
     private GeoApiContext getGeoContext() {
         GeoApiContext geoApiContext = new GeoApiContext();
         return geoApiContext.setQueryRateLimit(3).setApiKey(getString(R.string.google_maps_key)).setConnectTimeout(10, TimeUnit.SECONDS).setReadTimeout(10, TimeUnit.SECONDS).setWriteTimeout(1, TimeUnit.SECONDS);
     }
 
-    private void addMarkersToMap(DirectionsResult results, GoogleMap mMap) {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0].startLocation.lat, results.routes[0].legs[0].startLocation.lng)).title(results.routes[0].legs[0].startAddress));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0].endLocation.lat, results.routes[0].legs[0].endLocation.lng)).title(results.routes[0].legs[0].startAddress).snippet(getEndLocationTitle(results)));
-    }
-
-    private String getEndLocationTitle(DirectionsResult results) {
-        return "Time :" + results.routes[0].legs[0].duration.humanReadable + " Distance :" + results.routes[0].legs[0].distance.humanReadable;
-    }
-
-    private void addPolyline(DirectionsResult results, GoogleMap mMap) {
-        List<LatLng> decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.getEncodedPath());
-        mMap.addPolyline(new PolylineOptions().addAll(decodedPath));
+    private void addPolylines(DirectionsResult results, GoogleMap mMap) {
+        for (int i = 0; i< results.routes.length; i++) {
+            List<LatLng> decodedPath = PolyUtil.decode(results.routes[i].overviewPolyline.getEncodedPath());
+            mMap.addPolyline(new PolylineOptions().addAll(decodedPath));
+        }
     }
 
 }
