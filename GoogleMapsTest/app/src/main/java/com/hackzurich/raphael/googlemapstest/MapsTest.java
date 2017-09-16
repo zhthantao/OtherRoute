@@ -15,7 +15,7 @@ import com.google.maps.DirectionsApi;
 import com.google.maps.model.DirectionsResult;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.*;
-import com.google.android.gms.maps.model.Polyline;
+
 import android.util.Log;
 import android.graphics.*;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -61,8 +61,8 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
         DateTime now = new DateTime();
         try {
             DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(true).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
-            addPolylines(resultPT, mMap);
-
+            //addPolylines(resultPT, mMap);
+            addCustomizedPolyline(resultPT, mMap);
             List<LatLng> decodedPath = PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath());
             LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
             for (LatLng latLngPoint : decodedPath)
@@ -96,18 +96,39 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
         return  "Time :"+ results.routes[0].legs[0].duration.humanReadable + " Distance :" + results.routes[0].legs[0].distance.humanReadable;
     }
 
-    private void addCustomizedPolyline(DirectionsResult result, GoogleMap mMap) {
-        List<LatLng> decodedPath = PolyUtil.decode(result.routes[0].overviewPolyline.getEncodedPath());
-        Polyline line = mMap.addPolyline(new PolylineOptions()
-                .clickable(true)
-                .addAll(decodedPath)
+    private void addCustomizedPolyline(DirectionsResult results, GoogleMap mMap) {
+//        ArrayList<Integer> colorList = new ArrayList<>();
+//        colorList.add(Color.RED);
+//        colorList.add(Color.GREEN);
+//        colorList.add(Color.BLUE);
+        //for (int i = 0; i< results.routes.length; i++) {
+
+            List<LatLng> decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.getEncodedPath());
+            mMap.addPolyline(new PolylineOptions()
+                    //.clickable(true)
+                    .addAll(decodedPath)
+                    .width(15)
+                    .color(Color.BLACK));
+        List<LatLng> decodedPath2 = PolyUtil.decode(results.routes[1].overviewPolyline.getEncodedPath());
+        mMap.addPolyline(new PolylineOptions()
+                //.clickable(true)
+                .addAll(decodedPath2)
+                .width(15)
+                .color(Color.GREEN));
+        List<LatLng> decodedPath3 = PolyUtil.decode(results.routes[2].overviewPolyline.getEncodedPath());
+        mMap.addPolyline(new PolylineOptions()
+                //.clickable(true)
+                .addAll(decodedPath3)
                 .width(15)
                 .color(Color.RED));
+
+     //   }
+    }
+
     private void addPolylines(DirectionsResult results, GoogleMap mMap) {
         for (int i = 0; i< results.routes.length; i++) {
             List<LatLng> decodedPath = PolyUtil.decode(results.routes[i].overviewPolyline.getEncodedPath());
             mMap.addPolyline(new PolylineOptions().addAll(decodedPath));
         }
     }
-
 }
