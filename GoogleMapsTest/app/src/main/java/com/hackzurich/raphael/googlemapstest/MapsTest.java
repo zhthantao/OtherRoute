@@ -1,5 +1,6 @@
 package com.hackzurich.raphael.googlemapstest;
 
+import android.location.Address;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -15,18 +16,21 @@ import com.google.maps.DirectionsApi;
 import com.google.maps.model.DirectionsResult;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
-
 import android.util.Log;
+import com.google.android.gms.maps.model.LatLngBounds;
 
+import android.location.Geocoder;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 import org.joda.time.DateTime;
 
 
-public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
+public class MapsTest extends FragmentActivity implements OnMapReadyCallback,GoogleMap.OnMapLoadedCallback {
 
     private GoogleMap mMap;
+    private LatLngBounds latLngBounds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,23 +55,50 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng zurich = new LatLng(47.37, 8.5);
-        mMap.addMarker(new MarkerOptions().position(zurich).title("Marker in Zurich"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(zurich,15));
-        DateTime now = new DateTime();
         String origin = "Zurich Technopark";
         String destination = "Zurich Mainstation";
+        // Add a marker and move the camera
+        Geocoder geocoder = new Geocoder(this);
+        try {
+            Address originAddress = geocoder.getFromLocationName(origin,1).get(0);
+            Address destinationAddress = geocoder.getFromLocationName(destination,1).get(0);
+            LatLng pos = new LatLng((originAddress.getLatitude()+destinationAddress.getLatitude())/2,(originAddress.getLongitude()+destinationAddress.getLongitude())/2);
+            //mMap.addMarker(new MarkerOptions().position(pos).title("Marker in Zurich"));
+            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15));
+        } catch (IOException ex) {
+            Log.d("Error", ex.toString());
+        }
+
+        DateTime now = new DateTime();
         try {
             DirectionsResult result = DirectionsApi.newRequest(getGeoContext()).mode(TravelMode.DRIVING).origin(origin).destination(destination).departureTime(now).await();
             addPolyline(result, mMap);
-            DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
+            DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(true).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
             addPolyline(resultPT, mMap);
+
+            List<LatLng> decodedPath = PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath());
+            LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+            for (LatLng latLngPoint : decodedPath)
+                boundsBuilder.include(latLngPoint);
+
+            latLngBounds = boundsBuilder.build();
+            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    int routePadding = 100;
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds,routePadding));
+                }
+            });
+
         } catch (Exception e) {
-            Log.d("Error",e.toString());
+            Log.d("Error", e.toString());
         }
 
+    }
+
+    @Override
+    public void onMapLoaded() {
+        //Your code where exception occurs goes here...
     }
 
     private GeoApiContext getGeoContext() {
@@ -76,12 +107,12 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
     }
 
     private void addMarkersToMap(DirectionsResult results, GoogleMap mMap) {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0].startLocation.lat,results.routes[0].legs[0].startLocation.lng)).title(results.routes[0].legs[0].startAddress));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0].endLocation.lat,results.routes[0].legs[0].endLocation.lng)).title(results.routes[0].legs[0].startAddress).snippet(getEndLocationTitle(results)));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0].startLocation.lat, results.routes[0].legs[0].startLocation.lng)).title(results.routes[0].legs[0].startAddress));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0].endLocation.lat, results.routes[0].legs[0].endLocation.lng)).title(results.routes[0].legs[0].startAddress).snippet(getEndLocationTitle(results)));
     }
 
-    private String getEndLocationTitle(DirectionsResult results){
-        return  "Time :"+ results.routes[0].legs[0].duration.humanReadable + " Distance :" + results.routes[0].legs[0].distance.humanReadable;
+    private String getEndLocationTitle(DirectionsResult results) {
+        return "Time :" + results.routes[0].legs[0].duration.humanReadable + " Distance :" + results.routes[0].legs[0].distance.humanReadable;
     }
 
     private void addPolyline(DirectionsResult results, GoogleMap mMap) {
@@ -89,25 +120,4 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback {
         mMap.addPolyline(new PolylineOptions().addAll(decodedPath));
     }
 
-    public GeoPoint getLocationFromAddress(String strAddress){
-
-        Geocoder coder = new Geocoder(this);
-        List<Address> address;
-        GeoPoint p1 = null;
-
-        try {
-            address = coder.getFromLocationName(strAddress,5);
-            if (address==null) {
-                return null;
-            }
-            Address location=address.get(0);
-            location.getLatitude();
-            location.getLongitude();
-
-            p1 = new GeoPoint((double) (location.getLatitude() * 1E6),
-                    (double) (location.getLongitude() * 1E6));
-
-            return p1;
-        }
-    }
 }
