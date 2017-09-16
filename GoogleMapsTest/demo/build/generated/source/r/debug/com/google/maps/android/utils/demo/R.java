@@ -384,10 +384,13 @@ containing a value of this type.
         public static final int earthquakes=0x7f040015;
         public static final int earthquakes_with_usa=0x7f040016;
         public static final int kmlgeometrytest=0x7f040017;
-        public static final int medicare=0x7f040018;
-        public static final int police=0x7f040019;
-        public static final int radar_search=0x7f04001a;
-        public static final int usa=0x7f04001b;
+        public static final int mapstyle_grayscale=0x7f040018;
+        public static final int mapstyle_night=0x7f040019;
+        public static final int mapstyle_retro=0x7f04001a;
+        public static final int medicare=0x7f04001b;
+        public static final int police=0x7f04001c;
+        public static final int radar_search=0x7f04001d;
+        public static final int usa=0x7f04001e;
     }
     public static final class string {
         public static final int app_name=0x7f050014;

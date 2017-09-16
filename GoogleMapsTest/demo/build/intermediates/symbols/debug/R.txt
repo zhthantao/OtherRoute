@@ -135,10 +135,13 @@ int raw campus 0x7f040014
 int raw earthquakes 0x7f040015
 int raw earthquakes_with_usa 0x7f040016
 int raw kmlgeometrytest 0x7f040017
-int raw medicare 0x7f040018
-int raw police 0x7f040019
-int raw radar_search 0x7f04001a
-int raw usa 0x7f04001b
+int raw mapstyle_grayscale 0x7f040018
+int raw mapstyle_night 0x7f040019
+int raw mapstyle_retro 0x7f04001a
+int raw medicare 0x7f04001b
+int raw police 0x7f04001c
+int raw radar_search 0x7f04001d
+int raw usa 0x7f04001e
 int string app_name 0x7f050014
 int string attrib_format 0x7f050015
 int string button_gradient 0x7f050016

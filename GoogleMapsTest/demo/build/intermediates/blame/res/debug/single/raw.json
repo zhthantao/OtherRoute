@@ -8,6 +8,14 @@
         "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\library\\build\\intermediates\\bundles\\default\\res\\raw\\amu_nested_folders.kml"
     },
     {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\raw\\mapstyle_night.json",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\raw\\mapstyle_night.json"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\raw\\mapstyle_retro.json",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\raw\\mapstyle_retro.json"
+    },
+    {
         "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\raw\\campus.kml",
         "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\raw\\campus.kml"
     },
@@ -26,6 +34,10 @@
     {
         "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\raw\\amu_default_balloon.kml",
         "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\library\\build\\intermediates\\bundles\\default\\res\\raw\\amu_default_balloon.kml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\raw\\mapstyle_grayscale.json",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\raw\\mapstyle_grayscale.json"
     },
     {
         "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\raw\\amu_draw_order_ground_overlay.kml",

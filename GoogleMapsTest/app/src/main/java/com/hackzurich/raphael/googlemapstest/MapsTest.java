@@ -28,9 +28,10 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.util.concurrent.TimeUnit;
 import org.joda.time.DateTime;
 import java.util.*;
-
-
-
+import android.widget.*;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.view.View;
 
 
 public class MapsTest extends FragmentActivity implements OnMapReadyCallback,GoogleMap.OnInfoWindowClickListener,
@@ -43,6 +44,27 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
     private static final int PATTERN_DASH_LENGTH_PX = 20;
     private static Polyline[] polylines = new Polyline[3];
     private static DirectionsResult results;
+    TextView text1;
+    long startTime = 0;
+
+    Handler timerHandler = new Handler();
+    Runnable timerRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            long millis = System.currentTimeMillis() - startTime;
+            int seconds = (int) (millis / 1000);
+            int minutes = seconds / 60;
+            seconds = seconds % 60;
+            text1.setText("Score = " + String.format("%d", (int)(seconds*166.66)));
+            timerHandler.postDelayed(this, 500);
+            if(seconds>=6)
+            {
+                text1.setText("Score = " + String.format("%d", 1000));
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +73,9 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
+        text1=(TextView)findViewById(R.id.textView1);
+        text1.setVisibility(View.GONE);
     }
-
 
     /**
      * Manipulates the map once available.
@@ -283,5 +304,9 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
 
         MarkerAnimation.animateMarkerToGB(marker,new LatLng(results.routes[0].legs[0]
                 .endLocation.lat,results.routes[0].legs[0].endLocation.lng),mLatLngInterpolator);
+        startTime = System.currentTimeMillis();
+        timerHandler.postDelayed(timerRunnable, 0);
+        text1.setTextColor(Color.WHITE);
+        text1.setVisibility(View.VISIBLE);
     }
     }
