@@ -56,6 +56,9 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
     Map<String, String> originStations = new HashMap<String, String>();
     Map<String, String> destinationStations =  new HashMap<String, String>();
     Handler timerHandler = new Handler();
+
+    String origin = "Giessereistrasse 18, 8005 Zürich";
+    String destination = "Tannenstrasse 17, 8006 Zurich";
           
     Runnable timerRunnable = new Runnable() {
 
@@ -126,8 +129,7 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             addMarkersToMapNew(resultPT,mMap, 0, "200", 0.5);
             addMarkersToMapNew(resultPT,mMap, 1, "1000", 0.5);
             addMarkersToMapNew(resultPT,mMap, 2, "0", 0.1);*/
-        String origin = "Giessereistrasse 18, 8005 Zürich";
-        String destination = "Tannenstrasse 17, 8006 Zurich";
+
 
         //originStations.add(origin);
         //destinationStations.add(destination);
@@ -240,21 +242,65 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             for (int l = 0; l < distances.size(); l++) {
                 sortedDistances[l] = distances.get(indices.get(l));
             }
-            ArrayList<List<LatLng>> filteredResults = new ArrayList<List<LatLng>>();
+            /*ArrayList<List<LatLng>> filteredResults = new ArrayList<List<LatLng>>();
             filteredResults.add(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[indices_k.get(indices.get(0))].overviewPolyline.getEncodedPath()));
             mMap.addPolyline(new PolylineOptions().addAll(filteredResults.get(0)).color(Color.RED));
             filteredResults.add(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].overviewPolyline.getEncodedPath()));
             mMap.addPolyline(new PolylineOptions().addAll(filteredResults.get(1)).color(Color.BLUE));
             filteredResults.add(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].overviewPolyline.getEncodedPath()));
-            mMap.addPolyline(new PolylineOptions().addAll(filteredResults.get(2)).color(Color.GREEN));
-            //mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(7).routes[0].legs[0].steps[0].polyline.getEncodedPath())).color(Color.GREEN));
+            mMap.addPolyline(new PolylineOptions().addAll(filteredResults.get(2)).color(Color.GREEN));*/
+            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[0].polyline.getEncodedPath())).color(Color.RED)).setPattern(PATTERN_POLYLINE_DOTTED);
+            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[1].polyline.getEncodedPath())).color(Color.RED));
+            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[2].polyline.getEncodedPath())).color(Color.RED)).setPattern(PATTERN_POLYLINE_DOTTED);
 
+            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[0].polyline.getEncodedPath())).color(Color.BLUE));
+            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[1].polyline.getEncodedPath())).color(Color.BLUE)).setPattern(PATTERN_POLYLINE_DOTTED);
+            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[2].polyline.getEncodedPath())).color(Color.BLUE));
+            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[3].polyline.getEncodedPath())).color(Color.BLUE)).setPattern(PATTERN_POLYLINE_DOTTED);
+
+            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[0].polyline.getEncodedPath())).color(Color.GREEN));
+            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[1].polyline.getEncodedPath())).color(Color.GREEN)).setPattern(PATTERN_POLYLINE_DOTTED);
+            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[2].polyline.getEncodedPath())).color(Color.GREEN));
+
+            String originEnd = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[0].startLocation.toString();
+            String dest = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[2].endLocation.toString();
+            try {
+                DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.WALKING).origin(origin).destination(originEnd).departureTime(now).await();
+                mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.RED)).setPattern(PATTERN_POLYLINE_DOTTED);
+                resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.WALKING).origin(dest).destination(destination).departureTime(now).await();
+                mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.RED)).setPattern(PATTERN_POLYLINE_DOTTED);
+
+            } catch (Exception e){
+                Log.e("Error", e.getMessage());
+            }
+
+            originEnd = results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[0].startLocation.toString();
+            dest = results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[3].endLocation.toString();
+            try {
+                DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.WALKING).origin(origin).destination(originEnd).departureTime(now).await();
+                mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.BLUE)).setPattern(PATTERN_POLYLINE_DOTTED);
+                resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.WALKING).origin(dest).destination(destination).departureTime(now).await();
+                mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.BLUE)).setPattern(PATTERN_POLYLINE_DOTTED);
+
+            } catch (Exception e){
+                Log.e("Error", e.getMessage());
+            }
+
+            originEnd = results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[0].startLocation.toString();
+            dest = results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[3].endLocation.toString();
+            try {
+                DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.WALKING).origin(origin).destination(originEnd).departureTime(now).await();
+                mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.GREEN)).setPattern(PATTERN_POLYLINE_DOTTED);
+
+            } catch (Exception e){
+                Log.e("Error", e.getMessage());
+            }
         }
     }
 
     private GeoApiContext getGeoContext() {
         GeoApiContext geoApiContext = new GeoApiContext();
-        return geoApiContext.setQueryRateLimit(3).setApiKey(getString(R.string.google_maps_key)).setConnectTimeout(10, TimeUnit.SECONDS).setReadTimeout(10, TimeUnit.SECONDS).setWriteTimeout(1, TimeUnit.SECONDS);
+        return geoApiContext.setQueryRateLimit(3).setApiKey(getString(R.string.google_maps_key)).setConnectTimeout(5, TimeUnit.SECONDS).setReadTimeout(5, TimeUnit.SECONDS).setWriteTimeout(1, TimeUnit.SECONDS);
     }
 
     private void addMarkersToMap(DirectionsResult results, GoogleMap mMap,int index,String reward, double percentage) {
@@ -404,22 +450,20 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         mMap.addMarker(markerOptions);
     }
 
-    private void animatedWalk()
-    {
+    private void animatedWalk() {
         Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0]
-                .startLocation.lat,results.routes[0].legs[0].startLocation.lng))
+                .startLocation.lat, results.routes[0].legs[0].startLocation.lng))
                 .title(results.routes[0].legs[0].startAddress));
 
-        LatLngInterpolator mLatLngInterpolator = new LatLngInterpolator.Spherical() ;
+        LatLngInterpolator mLatLngInterpolator = new LatLngInterpolator.Spherical();
 
-        MarkerAnimation.animateMarkerToGB(marker,new LatLng(results.routes[0].legs[0]
-                .endLocation.lat,results.routes[0].legs[0].endLocation.lng),mLatLngInterpolator);
+        MarkerAnimation.animateMarkerToGB(marker, new LatLng(results.routes[0].legs[0]
+                .endLocation.lat, results.routes[0].legs[0].endLocation.lng), mLatLngInterpolator);
         startTime = System.currentTimeMillis();
         timerHandler.postDelayed(timerRunnable, 0);
         text1.setTextColor(Color.WHITE);
         text1.setVisibility(View.VISIBLE);
     }
-
 
     private int counter = 0;
 
