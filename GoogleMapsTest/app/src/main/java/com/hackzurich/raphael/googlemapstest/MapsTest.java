@@ -77,7 +77,13 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
             addCustomizedPolyline(resultPT, mMap,"Bus", Color.BLUE);
             addCustomizedPolyline(resultPT, mMap,"Walk", Color.RED);
 
+            addMarkersToMap(resultPT,mMap, 0, "1000", 0.5);
+            addMarkersToMap(resultPT,mMap, 1, "500", 0.6);
+            addMarkersToMap(resultPT,mMap, 2, "200", 0.4);
+
+
             List<LatLng> decodedPath = PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath());
+
             LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
             for (LatLng latLngPoint : decodedPath)
                 boundsBuilder.include(latLngPoint);
@@ -101,9 +107,17 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
         return geoApiContext.setQueryRateLimit(3).setApiKey(getString(R.string.google_maps_key)).setConnectTimeout(10, TimeUnit.SECONDS).setReadTimeout(10, TimeUnit.SECONDS).setWriteTimeout(1, TimeUnit.SECONDS);
     }
 
-    private void addMarkersToMap(DirectionsResult results, GoogleMap mMap) {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0].startLocation.lat,results.routes[0].legs[0].startLocation.lng)).title(results.routes[0].legs[0].startAddress));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(results.routes[0].legs[0].endLocation.lat,results.routes[0].legs[0].endLocation.lng)).title(results.routes[0].legs[0].startAddress).snippet(getEndLocationTitle(results)));
+    private void addMarkersToMap(DirectionsResult results, GoogleMap mMap,int index,String reward, double percentage) {
+        LatLng middlePoint = computeCentroid(PolyUtil.decode(results.routes[index].overviewPolyline.getEncodedPath()), percentage);
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                .position(middlePoint)
+                .title(results.routes[0].legs[0].startAddress)
+                .visible(true)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                .title("Reward")
+                .snippet(reward));
+        marker.showInfoWindow();
+        marker.setInfoWindowAnchor(.5f,1.0f);
     }
 
     private String getEndLocationTitle(DirectionsResult results){
@@ -111,11 +125,6 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
     }
 
     private void addCustomizedPolyline(DirectionsResult results, GoogleMap mMap, String trafficType, int routeColor) {
-//        ArrayList<Integer> colorList = new ArrayList<>();
-//        colorList.add(Color.RED);
-//        colorList.add(Color.GREEN);
-//        colorList.add(Color.BLUE);
-        //for (int i = 0; i< results.routes.length; i++) {
     switch (trafficType){
         case "Bike" :
             List<LatLng> decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.getEncodedPath());
@@ -146,7 +155,6 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
                     .color(Color.RED));
             polyline3.setTag("Bus");
             polyline3.setPattern(PATTERN_POLYLINE_GAPED);
-
             break;
     }
     }
@@ -168,9 +176,6 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
     private static final List<PatternItem> PATTERN_POLYLINE_DASHED = Arrays.asList(DASH);
 
 
-
-
-
     @Override
     public void onPolylineClick(Polyline polyline) {
         // Flip from solid stroke to dotted stroke pattern.
@@ -190,5 +195,18 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,
 
         Toast.makeText(this, polyline.getTag().toString(),
                 Toast.LENGTH_SHORT).show();
+    }
+
+
+    private LatLng computeCentroid(List<LatLng> points, double percentage) {
+        double latitude = 0;
+        double longitude = 0;
+        int n = points.size();
+
+        for (LatLng point : points) {
+            latitude += point.latitude;
+            longitude += point.longitude;
+        }
+        return new LatLng(points.get((int)(percentage*n)).latitude,points.get((int)(percentage*n)).longitude);
     }
 }
