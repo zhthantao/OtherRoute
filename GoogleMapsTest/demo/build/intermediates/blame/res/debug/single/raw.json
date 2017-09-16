@@ -12,12 +12,12 @@
         "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\raw\\mapstyle_night.json"
     },
     {
-        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\raw\\mapstyle_retro.json",
-        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\raw\\mapstyle_retro.json"
-    },
-    {
         "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\raw\\campus.kml",
         "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\raw\\campus.kml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\raw\\mapstyle_retro.json",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\raw\\mapstyle_retro.json"
     },
     {
         "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\raw\\amu_ground_overlay.kml",

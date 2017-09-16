@@ -4,12 +4,12 @@
         "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\drawable-xhdpi\\mechanic.jpg"
     },
     {
-        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\common_google_signin_btn_text_light_focused.9.png",
-        "source": "C:\\Users\\spadmin\\.android\\build-cache\\df64672a20cd45506bbe64dcb98c64e4d9a8e60d\\output\\res\\drawable-xhdpi-v4\\common_google_signin_btn_text_light_focused.9.png"
-    },
-    {
         "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\common_google_signin_btn_icon_light_disabled.9.png",
         "source": "C:\\Users\\spadmin\\.android\\build-cache\\df64672a20cd45506bbe64dcb98c64e4d9a8e60d\\output\\res\\drawable-xhdpi-v4\\common_google_signin_btn_icon_light_disabled.9.png"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\common_google_signin_btn_text_light_focused.9.png",
+        "source": "C:\\Users\\spadmin\\.android\\build-cache\\df64672a20cd45506bbe64dcb98c64e4d9a8e60d\\output\\res\\drawable-xhdpi-v4\\common_google_signin_btn_text_light_focused.9.png"
     },
     {
         "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\amu_bubble_mask.9.png",
@@ -24,16 +24,16 @@
         "source": "C:\\Users\\spadmin\\.android\\build-cache\\df64672a20cd45506bbe64dcb98c64e4d9a8e60d\\output\\res\\drawable-xhdpi-v4\\common_google_signin_btn_text_dark_pressed.9.png"
     },
     {
-        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\turtle.jpg",
-        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\drawable-xhdpi\\turtle.jpg"
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\common_google_signin_btn_icon_dark_disabled.9.png",
+        "source": "C:\\Users\\spadmin\\.android\\build-cache\\df64672a20cd45506bbe64dcb98c64e4d9a8e60d\\output\\res\\drawable-xhdpi-v4\\common_google_signin_btn_icon_dark_disabled.9.png"
     },
     {
         "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\common_google_signin_btn_text_light_disabled.9.png",
         "source": "C:\\Users\\spadmin\\.android\\build-cache\\df64672a20cd45506bbe64dcb98c64e4d9a8e60d\\output\\res\\drawable-xhdpi-v4\\common_google_signin_btn_text_light_disabled.9.png"
     },
     {
-        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\common_google_signin_btn_icon_dark_disabled.9.png",
-        "source": "C:\\Users\\spadmin\\.android\\build-cache\\df64672a20cd45506bbe64dcb98c64e4d9a8e60d\\output\\res\\drawable-xhdpi-v4\\common_google_signin_btn_icon_dark_disabled.9.png"
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\turtle.jpg",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\res\\drawable-xhdpi\\turtle.jpg"
     },
     {
         "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\demo\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\gran.jpg",
