@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\amu_webview.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\library\\build\\intermediates\\bundles\\debug\\res\\layout\\amu_webview.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\amu_text_bubble.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\library\\build\\intermediates\\bundles\\debug\\res\\layout\\amu_text_bubble.xml"
+    },
+    {
+        "merged": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\library\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\amu_info_window.xml",
+        "source": "D:\\HackZurich\\HackZurich\\GoogleMapsTest\\library\\build\\intermediates\\bundles\\debug\\res\\layout\\amu_info_window.xml"
+    }
+]
