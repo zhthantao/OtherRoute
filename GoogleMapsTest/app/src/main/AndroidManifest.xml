@@ -31,7 +31,7 @@
 
         <activity
             android:name=".MapsTest"
-            android:label="@string/title_activity_maps_test">
+            android:label="OtherRoute">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
