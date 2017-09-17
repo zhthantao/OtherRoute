@@ -71,11 +71,11 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             int seconds = (int) (millis / 1000);
             int minutes = seconds / 60;
             seconds = seconds % 60;
-            text1.setText("Score = " + String.format("%d", (int)(seconds*166.66)));
+            text1.setText("Score = " + String.format("%d", (int)(seconds*100)));
             text1.setTextSize(40);
             text1.setTypeface(null, Typeface.BOLD);;
             timerHandler.postDelayed(this, 500);
-            if(seconds>=6)
+            if(seconds>=10)
             {
                 text1.setText("Score = " + String.format("%d", 1000));
             }
@@ -553,11 +553,11 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         MarkerAnimation.animateMarkerPath(marker,animationPath,mLatLngInterpolator);
 
        /* MarkerAnimation.animateMarkerToGB(marker, new LatLng(results.routes[0].legs[0]
-                .endLocation.lat, results.routes[0].legs[0].endLocation.lng), mLatLngInterpolator);
+                .endLocation.lat, results.routes[0].legs[0].endLocation.lng), mLatLngInterpolator);*/
         startTime = System.currentTimeMillis();
         timerHandler.postDelayed(timerRunnable, 0);
         text1.setTextColor(Color.WHITE);
-        text1.setVisibility(View.VISIBLE);*/
+        text1.setVisibility(View.VISIBLE);
     }
 
     private int counter = 0;
