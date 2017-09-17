@@ -1,5 +1,6 @@
 package com.hackzurich.raphael.googlemapstest;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -46,10 +47,13 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
     private GoogleMap mMap;
     private LatLngBounds latLngBounds;
 
+    List<LatLng> animationPath;
+
 
     private static final int PATTERN_GAP_LENGTH_PX = 50;
     private static final int PATTERN_DASH_LENGTH_PX = 20;
     private static ArrayList<Polyline> polylines = new ArrayList<Polyline>();
+    private static boolean transited = false;
     private static DirectionsResult results;
     TextView text1;
     long startTime = 0;
@@ -68,13 +72,20 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             int seconds = (int) (millis / 1000);
             int minutes = seconds / 60;
             seconds = seconds % 60;
-            text1.setText("Score = " + String.format("%d", (int)(seconds*166.66)));
+            text1.setText("Score = " + String.format("%d", (int)(seconds*100)));
             text1.setTextSize(40);
             text1.setTypeface(null, Typeface.BOLD);;
             timerHandler.postDelayed(this, 500);
-            if(seconds>=6)
+            if(seconds>=10)
             {
                 text1.setText("Score = " + String.format("%d", 1000));
+            }
+            if(seconds>=15 && !transited)
+            {
+                transiteToNext();
+                transited = true;
+                //Intent intent = new Intent(this, ClosingActivity.class);
+                //startActivity(intent);
             }
         }
     };
@@ -295,6 +306,9 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             addMarkersToMapNew(results.get(indices_i.get(indices.get(indices.size()-1))),mMap,indices_k.get(indices.get(indices.size()-1)),"1000",0.5);
 
 
+            animationPath = PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].overviewPolyline.getEncodedPath());
+
+
             String originEnd = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[0].startLocation.toString();
             String dest = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[2].endLocation.toString();
             try {
@@ -500,7 +514,8 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
 //            }
 
             //polyline.setWidth(50);
-            Toast.makeText(this," This route will take you to your destination in " + time + " mins. You will be rewarded " +  Integer.toString(reward) + "P.",
+            Toast.makeText(this,"This route will take you to your destination in " + time + " mins. You will be rewarded " +  Integer.toString(reward) + "P.",
+
                     Toast.LENGTH_LONG).show();
         } else {
             // The default pattern is a solid stroke.
@@ -543,8 +558,10 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
 
         LatLngInterpolator mLatLngInterpolator = new LatLngInterpolator.Spherical();
 
-        MarkerAnimation.animateMarkerToGB(marker, new LatLng(results.routes[0].legs[0]
-                .endLocation.lat, results.routes[0].legs[0].endLocation.lng), mLatLngInterpolator);
+        MarkerAnimation.animateMarkerPath(marker,animationPath,mLatLngInterpolator);
+
+       /* MarkerAnimation.animateMarkerToGB(marker, new LatLng(results.routes[0].legs[0]
+                .endLocation.lat, results.routes[0].legs[0].endLocation.lng), mLatLngInterpolator);*/
         startTime = System.currentTimeMillis();
         timerHandler.postDelayed(timerRunnable, 0);
         text1.setTextColor(Color.WHITE);
@@ -577,5 +594,12 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         Log.d("getUrl", googlePlacesUrl.toString());
         return (googlePlacesUrl.toString());
     }
+
+    private void transiteToNext()
+    {
+        Intent intent = new Intent(this, ClosingActivity.class);
+        startActivity(intent);
+    }
+
 
 }
