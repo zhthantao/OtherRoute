@@ -500,7 +500,7 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
 //            }
 
             //polyline.setWidth(50);
-            Toast.makeText(this," This route will take you to your destination in " + time + " mins. You will be rewarded " +  Integer.toString(reward) + "P.",
+            Toast.makeText(this,"This route will take you to your destination in " + time + " mins. You will be rewarded " +  Integer.toString(reward) + "P.",
                     Toast.LENGTH_LONG).show();
         } else {
             // The default pattern is a solid stroke.
