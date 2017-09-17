@@ -1,5 +1,6 @@
 package com.hackzurich.raphael.googlemapstest;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -52,7 +53,7 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
     private static final int PATTERN_GAP_LENGTH_PX = 50;
     private static final int PATTERN_DASH_LENGTH_PX = 20;
     private static ArrayList<Polyline> polylines = new ArrayList<Polyline>();
-
+    private static boolean transited = false;
     private static DirectionsResult results;
     TextView text1;
     long startTime = 0;
@@ -78,6 +79,13 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             if(seconds>=10)
             {
                 text1.setText("Score = " + String.format("%d", 1000));
+            }
+            if(seconds>=15 && !transited)
+            {
+                transiteToNext();
+                transited = true;
+                //Intent intent = new Intent(this, ClosingActivity.class);
+                //startActivity(intent);
             }
         }
     };
@@ -586,5 +594,12 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         Log.d("getUrl", googlePlacesUrl.toString());
         return (googlePlacesUrl.toString());
     }
+
+    private void transiteToNext()
+    {
+        Intent intent = new Intent(this, ClosingActivity.class);
+        startActivity(intent);
+    }
+
 
 }
