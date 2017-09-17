@@ -46,10 +46,13 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
     private GoogleMap mMap;
     private LatLngBounds latLngBounds;
 
+    List<LatLng> animationPath;
+
 
     private static final int PATTERN_GAP_LENGTH_PX = 50;
     private static final int PATTERN_DASH_LENGTH_PX = 20;
     private static ArrayList<Polyline> polylines = new ArrayList<Polyline>();
+
     private static DirectionsResult results;
     TextView text1;
     long startTime = 0;
@@ -295,6 +298,9 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             addMarkersToMapNew(results.get(indices_i.get(indices.get(indices.size()-1))),mMap,indices_k.get(indices.get(indices.size()-1)),"1000",0.5);
 
 
+            animationPath = PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].overviewPolyline.getEncodedPath());
+
+
             String originEnd = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[0].startLocation.toString();
             String dest = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[2].endLocation.toString();
             try {
@@ -501,6 +507,7 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
 
             //polyline.setWidth(50);
             Toast.makeText(this,"This route will take you to your destination in " + time + " mins. You will be rewarded " +  Integer.toString(reward) + "P.",
+
                     Toast.LENGTH_LONG).show();
         } else {
             // The default pattern is a solid stroke.
@@ -543,12 +550,14 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
 
         LatLngInterpolator mLatLngInterpolator = new LatLngInterpolator.Spherical();
 
-        MarkerAnimation.animateMarkerToGB(marker, new LatLng(results.routes[0].legs[0]
+        MarkerAnimation.animateMarkerPath(marker,animationPath,mLatLngInterpolator);
+
+       /* MarkerAnimation.animateMarkerToGB(marker, new LatLng(results.routes[0].legs[0]
                 .endLocation.lat, results.routes[0].legs[0].endLocation.lng), mLatLngInterpolator);
         startTime = System.currentTimeMillis();
         timerHandler.postDelayed(timerRunnable, 0);
         text1.setTextColor(Color.WHITE);
-        text1.setVisibility(View.VISIBLE);
+        text1.setVisibility(View.VISIBLE);*/
     }
 
     private int counter = 0;

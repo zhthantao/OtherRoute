@@ -54,30 +54,32 @@ public class MarkerAnimation {
         final Handler handler = new Handler();
         final long start = SystemClock.uptimeMillis();
         final Interpolator interpolator = new AccelerateDecelerateInterpolator();
-        final float durationInMs = 3000;
+        final float durationInMs = 10000;
 
-        handler.post(new Runnable() {
+        new Handler().post(new Runnable() {
             long elapsed;
             float t;
             float v;
 
             @Override
             public void run() {
-                for (int i = 0; i< mPath.size(); i ++)
-                {
+                //for (int i = 0; i< mPath.size(); i ++)
+                //{
                 // Calculate progress using interpolator
                 elapsed = SystemClock.uptimeMillis() - start;
                 t = elapsed / durationInMs;
                 v = interpolator.getInterpolation(t);
 
-                marker.setPosition(latLngInterpolator.interpolate(v, startPosition, mPath.get(i)));
+                //marker.setPosition(latLngInterpolator.interpolate(v, startPosition, mPath.get(mPath.size()-1)));
+                marker.setPosition(mPath.get((int)Math.floor(t*(mPath.size()-1))));
 
-                // Repeat till progress is complete.
+                    // Repeat till progress is complete.
                 if (t < 1) {
                     // Post again 16ms later.
                     handler.postDelayed(this, 16);
                 }
-            }}
+            //}
+            }
         });
     }
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
