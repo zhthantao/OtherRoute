@@ -46,10 +46,12 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
     private GoogleMap mMap;
     private LatLngBounds latLngBounds;
 
+    List<LatLng> animationPath;
+
 
     private static final int PATTERN_GAP_LENGTH_PX = 50;
     private static final int PATTERN_DASH_LENGTH_PX = 20;
-    private static Polyline[] polylines = new Polyline[3];
+    private static Polyline[] polylines = new Polyline[10];
     private static DirectionsResult results;
     TextView text1;
     long startTime = 0;
@@ -139,9 +141,9 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.TRANSIT).origin(origin).destination(destination).departureTime(now).await();
 
             //addPolylines(resultPT, mMap);
-//            int radius = 300;
-//            getNearbyStations(resultPT.routes[0].legs[0].startLocation.lat,resultPT.routes[0].legs[0].startLocation.lng,radius, "origin");
-//            getNearbyStations(resultPT.routes[0].legs[resultPT.routes[0].legs.length-1].endLocation.lat,resultPT.routes[0].legs[resultPT.routes[0].legs.length-1].endLocation.lng,radius, "destination");
+            int radius = 300;
+            getNearbyStations(resultPT.routes[0].legs[0].startLocation.lat,resultPT.routes[0].legs[0].startLocation.lng,radius, "origin");
+            getNearbyStations(resultPT.routes[0].legs[resultPT.routes[0].legs.length-1].endLocation.lat,resultPT.routes[0].legs[resultPT.routes[0].legs.length-1].endLocation.lng,radius, "destination");
             results = resultPT;
             //addPolylines(resultPT, mMap);
             //addCustomizedPolyline(resultPT, mMap,"Bike", Color.rgb(253,174,97));
@@ -249,18 +251,40 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             mMap.addPolyline(new PolylineOptions().addAll(filteredResults.get(1)).color(Color.BLUE));
             filteredResults.add(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].overviewPolyline.getEncodedPath()));
             mMap.addPolyline(new PolylineOptions().addAll(filteredResults.get(2)).color(Color.GREEN));*/
-            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[0].polyline.getEncodedPath())).color(Color.RED)).setPattern(PATTERN_POLYLINE_DOTTED);
-            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[1].polyline.getEncodedPath())).color(Color.RED));
-            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[2].polyline.getEncodedPath())).color(Color.RED)).setPattern(PATTERN_POLYLINE_DOTTED);
+            polylines[0] = mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[0].polyline.getEncodedPath())).color(Color.rgb(248,255,17)));
+            polylines[0].setPattern(PATTERN_POLYLINE_DOTTED);
+            polylines[0].setTag("Low");
+            polylines[1] = mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[1].polyline.getEncodedPath())).color(Color.rgb(248,255,17)));
+            polylines[1].setTag("Low");
+            polylines[2] = mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[2].polyline.getEncodedPath())).color(Color.rgb(248,255,17)));
+            polylines[2].setPattern(PATTERN_POLYLINE_DOTTED);
+            polylines[2].setTag("Low");
+            addMarkersToMapNew(results.get(indices_i.get(indices.get(0))),mMap,0,"10",0.5);
 
-            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[0].polyline.getEncodedPath())).color(Color.BLUE));
-            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[1].polyline.getEncodedPath())).color(Color.BLUE)).setPattern(PATTERN_POLYLINE_DOTTED);
-            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[2].polyline.getEncodedPath())).color(Color.BLUE));
-            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[3].polyline.getEncodedPath())).color(Color.BLUE)).setPattern(PATTERN_POLYLINE_DOTTED);
+            polylines[3] = mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[0].polyline.getEncodedPath())).color(Color.rgb(215,25,28)));
+            polylines[3].setTag("Middle");
+            polylines[4] = mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[1].polyline.getEncodedPath())).color(Color.rgb(215,25,28)));
+            polylines[4].setPattern(PATTERN_POLYLINE_DOTTED);
+            polylines[4].setTag("Middle");
 
-            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[0].polyline.getEncodedPath())).color(Color.GREEN));
-            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[1].polyline.getEncodedPath())).color(Color.GREEN)).setPattern(PATTERN_POLYLINE_DOTTED);
-            mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[2].polyline.getEncodedPath())).color(Color.GREEN));
+            polylines[5] = mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[2].polyline.getEncodedPath())).color(Color.rgb(215,25,28)));
+            polylines[5].setTag("Middle");
+            polylines[6] = mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[3].polyline.getEncodedPath())).color(Color.rgb(215,25,28)));
+            polylines[6].setPattern(PATTERN_POLYLINE_DOTTED);
+            polylines[6].setTag("Middle");
+            addMarkersToMapNew(results.get(indices_i.get(indices.get(indices.size()-3))),mMap,indices_k.get(indices.get(indices.size()-3)),"500",0.5);
+
+
+            polylines[7] = mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[0].polyline.getEncodedPath())).color(Color.rgb(44,200,182)));
+            polylines[7].setTag("High");
+            polylines[8] = mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[1].polyline.getEncodedPath())).color(Color.rgb(44,200,182)));
+            polylines[8].setPattern(PATTERN_POLYLINE_DOTTED);
+            polylines[8].setTag("High");
+            polylines[9] = mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[2].polyline.getEncodedPath())).color(Color.rgb(44,200,182)));
+            polylines[9].setTag("High");
+            addMarkersToMapNew(results.get(indices_i.get(indices.get(indices.size()-1))),mMap,indices_k.get(indices.get(indices.size()-1)),"1000",0.5);
+
+            animationPath = PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].overviewPolyline.getEncodedPath());
 
             String originEnd = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[0].startLocation.toString();
             String dest = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[2].endLocation.toString();
@@ -396,15 +420,15 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
         int time = 0;
 
         switch (polyline.getTag().toString()) {
-            case "Bike":
-                reward = 200;
+            case "Low":
+                reward = 10;
                 time = 15;
                 break;
-            case "Bus":
-                reward = 0;
-                time = 10;
+            case "Middle":
+                reward = 500;
+                time = 20;
                 break;
-            case "Walk":
+            case "High":
                 reward = 1000;
                 time = 25;
                 break;
@@ -414,7 +438,7 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
                 polylineX.setWidth(15);
             }
             polyline.setWidth(50);
-            Toast.makeText(this,"Choose to " + polyline.getTag().toString() + ", it will take " + time + " mins, and get reward of " +  Integer.toString(reward),
+            Toast.makeText(this," This route will take you to your destination in " + time + " mins. You will be rewarded " +  Integer.toString(reward) + "P.",
                     Toast.LENGTH_LONG).show();
         } else {
             // The default pattern is a solid stroke.
@@ -457,12 +481,14 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
 
         LatLngInterpolator mLatLngInterpolator = new LatLngInterpolator.Spherical();
 
-        MarkerAnimation.animateMarkerToGB(marker, new LatLng(results.routes[0].legs[0]
+        MarkerAnimation.animateMarkerPath(marker,animationPath,mLatLngInterpolator);
+
+       /* MarkerAnimation.animateMarkerToGB(marker, new LatLng(results.routes[0].legs[0]
                 .endLocation.lat, results.routes[0].legs[0].endLocation.lng), mLatLngInterpolator);
         startTime = System.currentTimeMillis();
         timerHandler.postDelayed(timerRunnable, 0);
         text1.setTextColor(Color.WHITE);
-        text1.setVisibility(View.VISIBLE);
+        text1.setVisibility(View.VISIBLE);*/
     }
 
     private int counter = 0;
