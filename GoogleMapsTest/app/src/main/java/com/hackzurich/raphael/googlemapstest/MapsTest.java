@@ -263,7 +263,19 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             filteredResults.add(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].overviewPolyline.getEncodedPath()));
             mMap.addPolyline(new PolylineOptions().addAll(filteredResults.get(2)).color(Color.GREEN));*/
             int n = 0;
-            polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[0].polyline.getEncodedPath())).color(Color.rgb(248,255,17))));
+
+            int numberOfSteps = results.get(indices_i.get(indices.get(0))).routes[indices_k.get(indices.get(0))].legs[0].steps.length;
+
+            for (int i = 0; i < numberOfSteps; i++) {
+                polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[indices_k.get(indices.get(0))].legs[0].steps[i].polyline.getEncodedPath())).color(Color.rgb(248,255,17))));
+
+                if (results.get(indices_i.get(indices.get(0))).routes[indices_k.get(indices.get(0))].legs[0].steps[i].travelMode == TravelMode.WALKING)
+                    polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
+                polylines.get(n).setTag("Low");
+                n++;
+            }
+
+            /*polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[0].polyline.getEncodedPath())).color(Color.rgb(248,255,17))));
             polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
             polylines.get(n).setTag("Low");
             n++;
@@ -273,13 +285,22 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[2].polyline.getEncodedPath())).color(Color.rgb(248,255,17))));
             polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
             polylines.get(n).setTag("Low");
-            n++;
+            n++;*/
+
             addMarkersToMapNew(results.get(indices_i.get(indices.get(0))),mMap,0,"10",0.5);
 
-            polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[0].polyline.getEncodedPath())).color(Color.rgb(215,25,28))));
-            polylines.get(n).setTag("Middle");
-            n++;
-            polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[1].polyline.getEncodedPath())).color(Color.rgb(215,25,28))));
+            numberOfSteps = results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps.length;
+
+            for (int i = 0; i < numberOfSteps; i++) {
+                polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[i].polyline.getEncodedPath())).color(Color.rgb(215,25,28))));
+                if (results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[i].travelMode == TravelMode.WALKING)
+                    polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
+                polylines.get(n).setTag("Middle");
+                n++;
+            }
+
+
+           /* polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[1].polyline.getEncodedPath())).color(Color.rgb(215,25,28))));
             polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
             polylines.get(n).setTag("Middle");
             n++;
@@ -289,11 +310,21 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[3].polyline.getEncodedPath())).color(Color.rgb(215,25,28))));
             polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
             polylines.get(n).setTag("Middle");
-            n++;
+            n++;*/
+
             addMarkersToMapNew(results.get(indices_i.get(indices.get(indices.size()-3))),mMap,indices_k.get(indices.get(indices.size()-3)),"500",0.5);
 
+            numberOfSteps = results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps.length;
 
-            polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[0].polyline.getEncodedPath())).color(Color.rgb(44,200,182))));
+            for (int i = 0; i < numberOfSteps; i++) {
+                polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[i].polyline.getEncodedPath())).color(Color.rgb(44,200,182))));
+                if (results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[i].travelMode == TravelMode.WALKING)
+                    polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
+                polylines.get(n).setTag("High");
+                n++;
+            }
+
+            /*polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[0].polyline.getEncodedPath())).color(Color.rgb(44,200,182))));
             polylines.get(n).setTag("High");
             n++;
             polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[1].polyline.getEncodedPath())).color(Color.rgb(44,200,182))));
@@ -302,24 +333,26 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
             n++;
             polylines.add(mMap.addPolyline(new PolylineOptions().clickable(true).addAll(PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[2].polyline.getEncodedPath())).color(Color.rgb(44,200,182))));
             polylines.get(n).setTag("High");
-            n++;
+            n++;*/
             addMarkersToMapNew(results.get(indices_i.get(indices.get(indices.size()-1))),mMap,indices_k.get(indices.get(indices.size()-1)),"1000",0.5);
 
 
             animationPath = PolyUtil.decode(results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].overviewPolyline.getEncodedPath());
 
+            now = new DateTime();
 
             String originEnd = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[0].startLocation.toString();
-            String dest = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[2].endLocation.toString();
+            numberOfSteps = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps.length;
+            String dest = results.get(indices_i.get(indices.get(0))).routes[0].legs[0].steps[numberOfSteps-1].endLocation.toString();
             try {
                 DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.WALKING).origin(origin).destination(originEnd).departureTime(now).await();
-                polylines.add(mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.rgb(44,200,182))));
+                polylines.add(mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.rgb(248,255,17))));
                 polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
-                polylines.get(n).setTag("High");
+                polylines.get(n).setTag("Low");
                 n++;
                 resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.WALKING).origin(dest).destination(destination).departureTime(now).await();
 
-                polylines.add(mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.rgb(44,200,182))));
+                polylines.add(mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.rgb(248,255,17))));
                 polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
                 polylines.get(n).setTag("High");
                 n++;
@@ -327,30 +360,33 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
                 Log.e("Error", e.getMessage());
             }
 
+            numberOfSteps = results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps.length;
             originEnd = results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[0].startLocation.toString();
-            dest = results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[3].endLocation.toString();
+            dest = results.get(indices_i.get(indices.get(indices.size()-3))).routes[indices_k.get(indices.get(indices.size()-3))].legs[0].steps[numberOfSteps-1].endLocation.toString();
             try {
                 DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.WALKING).origin(origin).destination(originEnd).departureTime(now).await();
-//                polylines.add(mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.BLUE)));
-//                polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
-//                polylines.get(n).setTag("Middle");
-//                n++;
+                polylines.add(mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.rgb(215,25,28))));
+                polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
+                polylines.get(n).setTag("Middle");
+                n++;
                 resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.WALKING).origin(dest).destination(destination).departureTime(now).await();
-//                polylines.add(mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.BLUE)));
-//                polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
-//                polylines.get(n).setTag("Middle");
-//                n++;
+                polylines.add(mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.rgb(215,25,28))));
+                polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
+                polylines.get(n).setTag("Middle");
+                n++;
 
             } catch (Exception e){
                 Log.e("Error", e.getMessage());
             }
 
             originEnd = results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[0].startLocation.toString();
-            dest = results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[3].endLocation.toString();
+            //dest = results.get(indices_i.get(indices.get(indices.size()-1))).routes[indices_k.get(indices.get(indices.size()-1))].legs[0].steps[3].endLocation.toString();
             try {
                 DirectionsResult resultPT = DirectionsApi.newRequest(getGeoContext()).alternatives(false).mode(TravelMode.WALKING).origin(origin).destination(originEnd).departureTime(now).await();
-                //mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.GREEN)).setPattern(PATTERN_POLYLINE_DOTTED);
-
+                polylines.add(mMap.addPolyline(new PolylineOptions().addAll(PolyUtil.decode(resultPT.routes[0].overviewPolyline.getEncodedPath())).color(Color.rgb(44,200,182))));
+                polylines.get(n).setPattern(PATTERN_POLYLINE_DOTTED);
+                polylines.get(n).setTag("High");
+                n++;
             } catch (Exception e){
                 Log.e("Error", e.getMessage());
             }
@@ -476,19 +512,19 @@ public class MapsTest extends FragmentActivity implements OnMapReadyCallback,Goo
                 case "Low":
                     for (Polyline polylineX : polylines) {
                         if(polylineX.getTag().toString().equals("Low"))
-                        polylineX.setWidth(50);
+                        polylineX.setWidth(25);
                     }
                     break;
                 case "Middle":
                     for (Polyline polylineX : polylines) {
                         if(polylineX.getTag().toString().equals("Middle"))
-                            polylineX.setWidth(50);
+                            polylineX.setWidth(25);
                     }
                     break;
                 case "High":
                     for (Polyline polylineX : polylines) {
                         if(polylineX.getTag().toString().equals("High"))
-                            polylineX.setWidth(50);
+                            polylineX.setWidth(25);
                     }
                     break;
             }
